@@ -34,20 +34,20 @@ export function MetricCard({ title, value, subtitle, icon: Icon, color, trend, d
       transition={{ duration: 0.5, delay }}
       className="glass-card cyber-border rounded-lg p-5 hover:glow-cyan transition-all duration-300"
     >
-      <div className="flex items-start justify-between">
-        <div className="space-y-1">
-          <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{title}</p>
-          <p className={cn("text-3xl font-display font-bold", colorClasses[color])}>{value}</p>
-          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
-          {trend && (
-            <p className={cn("text-sm font-medium", trend.isPositive ? "text-success" : "text-destructive")}>
-              {trend.isPositive ? '↑' : '↓'} {Math.abs(trend.value)}% from last week
-            </p>
-          )}
+      <div className="flex items-center gap-3 mb-3">
+        <div className={cn("p-2.5 rounded-lg", bgClasses[color])}>
+          <Icon className={cn("w-5 h-5", colorClasses[color])} />
         </div>
-        <div className={cn("p-3 rounded-lg", bgClasses[color])}>
-          <Icon className={cn("w-6 h-6", colorClasses[color])} />
-        </div>
+        <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{title}</p>
+      </div>
+      <div className="space-y-1">
+        <p className={cn("text-3xl font-display font-bold", colorClasses[color])}>{value}</p>
+        {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+        {trend && (
+          <p className={cn("text-sm font-medium", trend.isPositive ? "text-success" : "text-destructive")}>
+            {trend.isPositive ? '↑' : '↓'} {Math.abs(trend.value)}% from last week
+          </p>
+        )}
       </div>
     </motion.div>
   );
