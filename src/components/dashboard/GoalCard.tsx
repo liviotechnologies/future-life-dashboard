@@ -1,12 +1,14 @@
 import { motion } from 'framer-motion';
-import { Check, Circle, Trash2 } from 'lucide-react';
+import { Check, Trash2, TrendingUp } from 'lucide-react';
 import { Goal } from '@/types/goals';
 import { cn } from '@/lib/utils';
+import { UpdateProgressPopover } from './UpdateProgressPopover';
 
 interface GoalCardProps {
   goal: Goal;
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
+  onUpdateProgress?: (id: string, newProgress: number) => void;
   delay?: number;
 }
 
@@ -16,7 +18,7 @@ const priorityColors = {
   low: 'border-l-success',
 };
 
-export function GoalCard({ goal, onToggle, onDelete, delay = 0 }: GoalCardProps) {
+export function GoalCard({ goal, onToggle, onDelete, onUpdateProgress, delay = 0 }: GoalCardProps) {
   const progress = goal.target ? Math.round((goal.progress / goal.target) * 100) : goal.progress;
 
   return (
@@ -73,12 +75,30 @@ export function GoalCard({ goal, onToggle, onDelete, delay = 0 }: GoalCardProps)
           )}
         </div>
 
-        <button
-          onClick={() => onDelete(goal.id)}
-          className="opacity-0 group-hover:opacity-100 p-1 text-muted-foreground hover:text-destructive transition-all duration-300 shrink-0"
-        >
-          <Trash2 className="w-3.5 h-3.5" />
-        </button>
+        <div className="flex items-center gap-1 shrink-0">
+          {/* Update Progress Button - only for goals with targets */}
+          {goal.target && !goal.completed && onUpdateProgress && (
+            <UpdateProgressPopover
+              goal={goal}
+              onUpdate={onUpdateProgress}
+              trigger={
+                <button
+                  className="opacity-0 group-hover:opacity-100 p-1 text-muted-foreground hover:text-primary transition-all duration-300"
+                  title="Update progress"
+                >
+                  <TrendingUp className="w-3.5 h-3.5" />
+                </button>
+              }
+            />
+          )}
+
+          <button
+            onClick={() => onDelete(goal.id)}
+            className="opacity-0 group-hover:opacity-100 p-1 text-muted-foreground hover:text-destructive transition-all duration-300"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </div>
     </motion.div>
   );
