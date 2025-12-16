@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion';
 import { Plus, Bell, Zap, LogOut } from 'lucide-react';
+import { AddGoalPopover } from './AddGoalPopover';
+import { GoalCategory } from '@/types/goals';
 
 interface HeaderProps {
-  onAddGoal: () => void;
+  onAddGoal: (goal: { title: string; category: GoalCategory; priority: 'low' | 'medium' | 'high'; target?: number; unit?: string }) => void;
   totalGoals: number;
   completedGoals: number;
   onSignOut?: () => void;
@@ -50,13 +52,15 @@ export function Header({
             <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full" />
           </button>
 
-          <button
-            onClick={onAddGoal}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:glow-cyan transition-all duration-300"
-          >
-            <Plus className="w-4 h-4" />
-            <span className="hidden sm:inline">Add Goal</span>
-          </button>
+          <AddGoalPopover
+            onAdd={onAddGoal}
+            trigger={
+              <button className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:glow-cyan transition-all duration-300">
+                <Plus className="w-4 h-4" />
+                <span className="hidden sm:inline">Add Goal</span>
+              </button>
+            }
+          />
 
           {onSignOut && (
             <button

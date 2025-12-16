@@ -1,8 +1,9 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus } from 'lucide-react';
 import * as Icons from 'lucide-react';
-import { Goal, CategoryInfo } from '@/types/goals';
+import { Goal, CategoryInfo, GoalCategory } from '@/types/goals';
 import { GoalCard } from './GoalCard';
+import { AddGoalPopover } from './AddGoalPopover';
 import { cn } from '@/lib/utils';
 
 interface CategorySectionProps {
@@ -10,7 +11,7 @@ interface CategorySectionProps {
   goals: Goal[];
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
-  onAdd: (category: string) => void;
+  onAdd: (goal: { title: string; category: GoalCategory; priority: 'low' | 'medium' | 'high'; target?: number; unit?: string }) => void;
 }
 
 const colorClasses = {
@@ -51,15 +52,20 @@ export function CategorySection({ category, goals, onToggle, onDelete, onAdd }: 
         </div>
         <div className="flex items-center gap-2">
           <span className={cn("text-lg font-display font-bold", colorClasses[category.color])}>{progress}%</span>
-          <button
-            onClick={() => onAdd(category.id)}
-            className={cn(
-              "p-1.5 rounded-lg transition-all duration-300 shrink-0",
-              bgClasses[category.color]
-            )}
-          >
-            <Plus className={cn("w-3.5 h-3.5", colorClasses[category.color])} />
-          </button>
+          <AddGoalPopover
+            onAdd={onAdd}
+            defaultCategory={category.id}
+            trigger={
+              <button
+                className={cn(
+                  "p-1.5 rounded-lg transition-all duration-300 shrink-0",
+                  bgClasses[category.color]
+                )}
+              >
+                <Plus className={cn("w-3.5 h-3.5", colorClasses[category.color])} />
+              </button>
+            }
+          />
         </div>
       </div>
 
