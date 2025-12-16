@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
-  Target, TrendingUp, CheckCircle2, Clock, 
+  Target, CheckCircle2, Clock, 
   DollarSign, Dumbbell, MapPin, Users 
 } from 'lucide-react';
 import { Sidebar } from '@/components/dashboard/Sidebar';
@@ -10,7 +10,6 @@ import { Header } from '@/components/dashboard/Header';
 import { MetricCard } from '@/components/dashboard/MetricCard';
 import { CategorySection } from '@/components/dashboard/CategorySection';
 import { CalendarWidget } from '@/components/dashboard/CalendarWidget';
-import { AddGoalDialog } from '@/components/dashboard/AddGoalDialog';
 import { GoalCategory } from '@/types/goals';
 import { categories } from '@/data/initialGoals';
 import { cn } from '@/lib/utils';
@@ -24,8 +23,6 @@ export default function Index() {
   
   const [activeCategory, setActiveCategory] = useState<GoalCategory | 'all'>('all');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [addDialogCategory, setAddDialogCategory] = useState<GoalCategory>('daily');
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -48,11 +45,6 @@ export default function Index() {
     
     return { total, completed, highPriority, financialProgress };
   }, [goals]);
-
-  const handleAddClick = (category?: string) => {
-    if (category) setAddDialogCategory(category as GoalCategory);
-    setIsAddDialogOpen(true);
-  };
 
   const completedDates = useMemo(() => {
     return goals
@@ -93,7 +85,7 @@ export default function Index() {
         sidebarCollapsed ? "ml-16" : "ml-64"
       )}>
         <Header
-          onAddGoal={() => handleAddClick()}
+          onAddGoal={addGoal}
           totalGoals={metrics.total}
           completedGoals={metrics.completed}
           onSignOut={signOut}
@@ -151,7 +143,7 @@ export default function Index() {
                       goals={goals.filter(g => g.category === cat.id)}
                       onToggle={toggleGoal}
                       onDelete={deleteGoal}
-                      onAdd={handleAddClick}
+                      onAdd={addGoal}
                     />
                   ))}
                 </div>
@@ -165,7 +157,7 @@ export default function Index() {
                       goals={goals.filter(g => g.category === cat.id)}
                       onToggle={toggleGoal}
                       onDelete={deleteGoal}
-                      onAdd={handleAddClick}
+                      onAdd={addGoal}
                     />
                   ))}
                 </div>
@@ -257,20 +249,13 @@ export default function Index() {
                     goals={filteredGoals}
                     onToggle={toggleGoal}
                     onDelete={deleteGoal}
-                    onAdd={handleAddClick}
+                    onAdd={addGoal}
                   />
                 ))}
             </div>
           )}
         </div>
       </main>
-
-      <AddGoalDialog
-        isOpen={isAddDialogOpen}
-        onClose={() => setIsAddDialogOpen(false)}
-        onAdd={addGoal}
-        defaultCategory={addDialogCategory}
-      />
     </div>
   );
 }
