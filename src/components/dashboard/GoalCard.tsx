@@ -26,39 +26,39 @@ export function GoalCard({ goal, onToggle, onDelete, delay = 0 }: GoalCardProps)
       exit={{ opacity: 0, x: 20 }}
       transition={{ duration: 0.3, delay }}
       className={cn(
-        "glass-card rounded-lg p-4 border-l-4 group hover:bg-muted/30 transition-all duration-300",
+        "glass-card rounded-lg p-3 border-l-3 group hover:bg-muted/30 transition-all duration-300",
         priorityColors[goal.priority],
         goal.completed && "opacity-60"
       )}
     >
-      <div className="flex items-start gap-3">
+      <div className="flex items-center gap-2.5">
         <button
           onClick={() => onToggle(goal.id)}
           className={cn(
-            "mt-1 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-300",
+            "w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all duration-300 shrink-0",
             goal.completed
               ? "bg-primary border-primary glow-cyan"
               : "border-muted-foreground hover:border-primary"
           )}
         >
-          {goal.completed && <Check className="w-3 h-3 text-primary-foreground" />}
+          {goal.completed && <Check className="w-2.5 h-2.5 text-primary-foreground" />}
         </button>
 
         <div className="flex-1 min-w-0">
           <p className={cn(
-            "font-semibold text-foreground transition-all duration-300",
+            "font-medium text-foreground text-sm leading-tight truncate transition-all duration-300",
             goal.completed && "line-through text-muted-foreground"
           )}>
             {goal.title}
           </p>
 
           {goal.target && (
-            <div className="mt-2 space-y-1">
-              <div className="flex justify-between text-xs text-muted-foreground">
+            <div className="mt-1.5 space-y-1">
+              <div className="flex justify-between text-[10px] text-muted-foreground">
                 <span>{goal.progress.toLocaleString()} {goal.unit}</span>
                 <span>{goal.target.toLocaleString()} {goal.unit}</span>
               </div>
-              <div className="h-2 bg-muted rounded-full overflow-hidden">
+              <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${Math.min(progress, 100)}%` }}
@@ -75,9 +75,9 @@ export function GoalCard({ goal, onToggle, onDelete, delay = 0 }: GoalCardProps)
 
         <button
           onClick={() => onDelete(goal.id)}
-          className="opacity-0 group-hover:opacity-100 p-1 text-muted-foreground hover:text-destructive transition-all duration-300"
+          className="opacity-0 group-hover:opacity-100 p-1 text-muted-foreground hover:text-destructive transition-all duration-300 shrink-0"
         >
-          <Trash2 className="w-4 h-4" />
+          <Trash2 className="w-3.5 h-3.5" />
         </button>
       </div>
     </motion.div>

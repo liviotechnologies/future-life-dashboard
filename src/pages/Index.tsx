@@ -137,10 +137,10 @@ export default function Index() {
 
           {/* Main Content */}
           {activeCategory === 'all' ? (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 space-y-6">
+            <div className="grid grid-cols-1 xl:grid-cols-4 gap-5">
+              <div className="xl:col-span-3 space-y-5">
                 {/* Featured Categories */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
                   {categories.slice(0, 4).map(cat => (
                     <CategorySection
                       key={cat.id}
@@ -154,7 +154,7 @@ export default function Index() {
                 </div>
 
                 {/* More Categories */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {categories.slice(4).map(cat => (
                     <CategorySection
                       key={cat.id}
@@ -169,7 +169,7 @@ export default function Index() {
               </div>
 
               {/* Sidebar Widgets */}
-              <div className="space-y-6">
+              <div className="xl:col-span-1 space-y-4">
                 <CalendarWidget completedDates={completedDates} />
 
                 {/* Quick Stats */}
@@ -177,37 +177,37 @@ export default function Index() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 }}
-                  className="glass-card cyber-border rounded-xl p-5"
+                  className="glass-card cyber-border rounded-xl p-4"
                 >
-                  <h3 className="font-display font-semibold text-foreground mb-4">Quick Stats</h3>
-                  <div className="space-y-4">
+                  <h3 className="font-display font-semibold text-foreground text-sm mb-3">Quick Stats</h3>
+                  <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Dumbbell className="w-4 h-4 text-success" />
-                        <span className="text-sm text-muted-foreground">Fitness</span>
+                        <span className="text-xs text-muted-foreground">Fitness</span>
                       </div>
-                      <span className="text-sm font-medium text-success">75%</span>
+                      <span className="text-xs font-medium text-success">75%</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <DollarSign className="w-4 h-4 text-warning" />
-                        <span className="text-sm text-muted-foreground">Financial</span>
+                        <span className="text-xs text-muted-foreground">Financial</span>
                       </div>
-                      <span className="text-sm font-medium text-warning">70%</span>
+                      <span className="text-xs font-medium text-warning">70%</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <MapPin className="w-4 h-4 text-secondary" />
-                        <span className="text-sm text-muted-foreground">Bucket List</span>
+                        <span className="text-xs text-muted-foreground">Bucket List</span>
                       </div>
-                      <span className="text-sm font-medium text-secondary">50%</span>
+                      <span className="text-xs font-medium text-secondary">50%</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Users className="w-4 h-4 text-primary" />
-                        <span className="text-sm text-muted-foreground">Customers</span>
+                        <span className="text-xs text-muted-foreground">Customers</span>
                       </div>
-                      <span className="text-sm font-medium text-primary">45%</span>
+                      <span className="text-xs font-medium text-primary">45%</span>
                     </div>
                   </div>
                 </motion.div>
@@ -217,13 +217,13 @@ export default function Index() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
-                  className="glass-card cyber-border rounded-xl p-5 text-center"
+                  className="glass-card cyber-border rounded-xl p-4 text-center"
                 >
-                  <div className="text-5xl font-display font-bold text-primary glow-text-cyan mb-2">
+                  <div className="text-4xl font-display font-bold text-primary glow-text-cyan mb-1">
                     7
                   </div>
                   <p className="text-sm text-muted-foreground">Day Streak 🔥</p>
-                  <p className="text-xs text-muted-foreground mt-1">Keep it up!</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">Keep it up!</p>
                 </motion.div>
               </div>
             </div>
