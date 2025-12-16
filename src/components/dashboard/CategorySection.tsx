@@ -36,35 +36,35 @@ export function CategorySection({ category, goals, onToggle, onDelete, onAdd }: 
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="glass-card cyber-border rounded-xl p-5 space-y-4"
+      className="glass-card cyber-border rounded-xl p-4 flex flex-col h-full min-h-[280px]"
     >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className={cn("p-2 rounded-lg", bgClasses[category.color])}>
-            {IconComponent && <IconComponent className={cn("w-5 h-5", colorClasses[category.color])} />}
+      {/* Header */}
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2.5">
+          <div className={cn("p-2 rounded-lg shrink-0", bgClasses[category.color])}>
+            {IconComponent && <IconComponent className={cn("w-4 h-4", colorClasses[category.color])} />}
           </div>
-          <div>
-            <h3 className="font-display font-semibold text-foreground">{category.label}</h3>
+          <div className="min-w-0">
+            <h3 className="font-display font-semibold text-foreground text-sm truncate">{category.label}</h3>
             <p className="text-xs text-muted-foreground">{completedCount}/{goals.length} completed</p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="text-right">
-            <p className={cn("text-2xl font-display font-bold", colorClasses[category.color])}>{progress}%</p>
-          </div>
+        <div className="flex items-center gap-2">
+          <span className={cn("text-lg font-display font-bold", colorClasses[category.color])}>{progress}%</span>
           <button
             onClick={() => onAdd(category.id)}
             className={cn(
-              "p-2 rounded-lg transition-all duration-300",
+              "p-1.5 rounded-lg transition-all duration-300 shrink-0",
               bgClasses[category.color]
             )}
           >
-            <Plus className={cn("w-4 h-4", colorClasses[category.color])} />
+            <Plus className={cn("w-3.5 h-3.5", colorClasses[category.color])} />
           </button>
         </div>
       </div>
 
-      <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+      {/* Progress bar */}
+      <div className="h-1 bg-muted rounded-full overflow-hidden mb-3">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
@@ -79,7 +79,8 @@ export function CategorySection({ category, goals, onToggle, onDelete, onAdd }: 
         />
       </div>
 
-      <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+      {/* Goals list */}
+      <div className="flex-1 space-y-2 overflow-y-auto pr-1 scrollbar-thin">
         <AnimatePresence>
           {goals.map((goal, index) => (
             <GoalCard
@@ -92,7 +93,9 @@ export function CategorySection({ category, goals, onToggle, onDelete, onAdd }: 
           ))}
         </AnimatePresence>
         {goals.length === 0 && (
-          <p className="text-center text-muted-foreground py-4 text-sm">No goals yet. Add your first one!</p>
+          <div className="flex items-center justify-center h-full">
+            <p className="text-center text-muted-foreground text-sm">No goals yet</p>
+          </div>
         )}
       </div>
     </motion.div>

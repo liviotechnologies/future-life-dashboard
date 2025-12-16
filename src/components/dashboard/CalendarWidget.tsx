@@ -42,46 +42,46 @@ export function CalendarWidget({ completedDates = [] }: CalendarWidgetProps) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="glass-card cyber-border rounded-xl p-5"
+      className="glass-card cyber-border rounded-xl p-4"
     >
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <Calendar className="w-5 h-5 text-primary" />
-          <h3 className="font-display font-semibold text-foreground">Calendar</h3>
+          <Calendar className="w-4 h-4 text-primary" />
+          <h3 className="font-display font-semibold text-foreground text-sm">Calendar</h3>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <button
             onClick={prevMonth}
             className="p-1 hover:bg-muted rounded transition-colors"
           >
-            <ChevronLeft className="w-4 h-4 text-muted-foreground" />
+            <ChevronLeft className="w-3.5 h-3.5 text-muted-foreground" />
           </button>
-          <span className="text-sm font-medium text-foreground min-w-[120px] text-center">
+          <span className="text-xs font-medium text-foreground min-w-[100px] text-center">
             {MONTHS[month]} {year}
           </span>
           <button
             onClick={nextMonth}
             className="p-1 hover:bg-muted rounded transition-colors"
           >
-            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+            <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-1 mb-2">
+      <div className="grid grid-cols-7 gap-0.5 mb-1">
         {DAYS.map(day => (
-          <div key={day} className="text-center text-xs font-medium text-muted-foreground py-1">
+          <div key={day} className="text-center text-[10px] font-medium text-muted-foreground py-1">
             {day}
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7 gap-0.5">
         {days.map((day, index) => (
           <div
             key={index}
             className={cn(
-              "aspect-square flex items-center justify-center text-sm rounded-md transition-all duration-200",
+              "aspect-square flex items-center justify-center text-xs rounded transition-all duration-200",
               day === null && "invisible",
               day && !isToday(day) && !hasActivity(day) && "text-muted-foreground hover:bg-muted",
               day && isToday(day) && "bg-primary text-primary-foreground font-bold glow-cyan",
@@ -93,13 +93,13 @@ export function CalendarWidget({ completedDates = [] }: CalendarWidgetProps) {
         ))}
       </div>
 
-      <div className="mt-4 flex items-center gap-4 text-xs text-muted-foreground">
+      <div className="mt-3 flex items-center gap-3 text-[10px] text-muted-foreground">
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded-sm bg-primary" />
+          <div className="w-2.5 h-2.5 rounded-sm bg-primary" />
           <span>Today</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded-sm bg-success/50" />
+          <div className="w-2.5 h-2.5 rounded-sm bg-success/50" />
           <span>Activity</span>
         </div>
       </div>
