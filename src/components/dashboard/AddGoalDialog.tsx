@@ -46,14 +46,14 @@ export function AddGoalDialog({ isOpen, onClose, onAdd, defaultCategory = 'daily
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[100]"
             onClick={onClose}
           />
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-lg glass-card cyber-border rounded-2xl p-8 z-50 max-h-[85vh] overflow-y-auto"
+            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-lg glass-card cyber-border rounded-2xl p-8 z-[101] max-h-[85vh] overflow-y-auto"
           >
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl font-display font-bold text-foreground glow-text-cyan">New Goal</h2>
