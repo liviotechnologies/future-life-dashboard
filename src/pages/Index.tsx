@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Target, TrendingUp, CheckCircle2, Clock, 
@@ -10,16 +11,27 @@ import { MetricCard } from '@/components/dashboard/MetricCard';
 import { CategorySection } from '@/components/dashboard/CategorySection';
 import { CalendarWidget } from '@/components/dashboard/CalendarWidget';
 import { AddGoalDialog } from '@/components/dashboard/AddGoalDialog';
-import { Goal, GoalCategory } from '@/types/goals';
-import { categories, initialGoals } from '@/data/initialGoals';
+import { GoalCategory } from '@/types/goals';
+import { categories } from '@/data/initialGoals';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/contexts/AuthContext';
+import { useGoals } from '@/hooks/useGoals';
 
 export default function Index() {
-  const [goals, setGoals] = useState<Goal[]>(initialGoals);
+  const { user, loading: authLoading, signOut } = useAuth();
+  const navigate = useNavigate();
+  const { goals, loading: goalsLoading, addGoal, toggleGoal, deleteGoal } = useGoals();
+  
   const [activeCategory, setActiveCategory] = useState<GoalCategory | 'all'>('all');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [addDialogCategory, setAddDialogCategory] = useState<GoalCategory>('daily');
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/auth', { replace: true });
+    }
+  }, [user, authLoading, navigate]);
 
   const filteredGoals = useMemo(() => {
     if (activeCategory === 'all') return goals;
@@ -37,31 +49,6 @@ export default function Index() {
     return { total, completed, highPriority, financialProgress };
   }, [goals]);
 
-  const toggleGoal = (id: string) => {
-    setGoals(prev => prev.map(g => 
-      g.id === id ? { ...g, completed: !g.completed, progress: g.completed ? 0 : 100 } : g
-    ));
-  };
-
-  const deleteGoal = (id: string) => {
-    setGoals(prev => prev.filter(g => g.id !== id));
-  };
-
-  const addGoal = (newGoal: { title: string; category: GoalCategory; priority: 'low' | 'medium' | 'high'; target?: number; unit?: string }) => {
-    const goal: Goal = {
-      id: Date.now().toString(),
-      title: newGoal.title,
-      category: newGoal.category,
-      completed: false,
-      progress: 0,
-      target: newGoal.target,
-      unit: newGoal.unit,
-      priority: newGoal.priority,
-      createdAt: new Date().toISOString(),
-    };
-    setGoals(prev => [goal, ...prev]);
-  };
-
   const handleAddClick = (category?: string) => {
     if (category) setAddDialogCategory(category as GoalCategory);
     setIsAddDialogOpen(true);
@@ -75,7 +62,22 @@ export default function Index() {
         d.setDate(d.getDate() - Math.floor(Math.random() * 30));
         return d.toISOString().split('T')[0];
       });
-  }, []);
+  }, [goals]);
+
+  if (authLoading || goalsLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Target className="w-12 h-12 text-primary animate-pulse mx-auto mb-4" />
+          <p className="text-muted-foreground">Loading your goals...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -94,6 +96,7 @@ export default function Index() {
           onAddGoal={() => handleAddClick()}
           totalGoals={metrics.total}
           completedGoals={metrics.completed}
+          onSignOut={signOut}
         />
 
         <div className="p-6 space-y-6">
@@ -186,28 +189,44 @@ export default function Index() {
                         <Dumbbell className="w-4 h-4 text-success" />
                         <span className="text-xs text-muted-foreground">Fitness</span>
                       </div>
-                      <span className="text-xs font-medium text-success">75%</span>
+                      <span className="text-xs font-medium text-success">
+                        {goals.filter(g => g.category === 'fitness').length > 0 
+                          ? Math.round((goals.filter(g => g.category === 'fitness' && g.completed).length / goals.filter(g => g.category === 'fitness').length) * 100)
+                          : 0}%
+                      </span>
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <DollarSign className="w-4 h-4 text-warning" />
                         <span className="text-xs text-muted-foreground">Financial</span>
                       </div>
-                      <span className="text-xs font-medium text-warning">70%</span>
+                      <span className="text-xs font-medium text-warning">
+                        {goals.filter(g => g.category === 'financial').length > 0 
+                          ? Math.round((goals.filter(g => g.category === 'financial' && g.completed).length / goals.filter(g => g.category === 'financial').length) * 100)
+                          : 0}%
+                      </span>
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <MapPin className="w-4 h-4 text-secondary" />
                         <span className="text-xs text-muted-foreground">Bucket List</span>
                       </div>
-                      <span className="text-xs font-medium text-secondary">50%</span>
+                      <span className="text-xs font-medium text-secondary">
+                        {goals.filter(g => g.category === 'bucket-list').length > 0 
+                          ? Math.round((goals.filter(g => g.category === 'bucket-list' && g.completed).length / goals.filter(g => g.category === 'bucket-list').length) * 100)
+                          : 0}%
+                      </span>
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Users className="w-4 h-4 text-primary" />
                         <span className="text-xs text-muted-foreground">Customers</span>
                       </div>
-                      <span className="text-xs font-medium text-primary">45%</span>
+                      <span className="text-xs font-medium text-primary">
+                        {goals.filter(g => g.category === 'customer').length > 0 
+                          ? Math.round((goals.filter(g => g.category === 'customer' && g.completed).length / goals.filter(g => g.category === 'customer').length) * 100)
+                          : 0}%
+                      </span>
                     </div>
                   </div>
                 </motion.div>
@@ -220,9 +239,9 @@ export default function Index() {
                   className="glass-card cyber-border rounded-xl p-4 text-center"
                 >
                   <div className="text-4xl font-display font-bold text-primary glow-text-cyan mb-1">
-                    7
+                    {goals.filter(g => g.completed).length}
                   </div>
-                  <p className="text-sm text-muted-foreground">Day Streak 🔥</p>
+                  <p className="text-sm text-muted-foreground">Goals Completed 🎯</p>
                   <p className="text-xs text-muted-foreground mt-0.5">Keep it up!</p>
                 </motion.div>
               </div>
