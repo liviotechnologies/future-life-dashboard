@@ -12,6 +12,7 @@ interface CategorySectionProps {
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   onAdd: (goal: { title: string; category: GoalCategory; priority: 'low' | 'medium' | 'high'; target?: number; unit?: string }) => void;
+  onUpdateProgress?: (id: string, newProgress: number) => void;
 }
 
 const colorClasses = {
@@ -28,7 +29,7 @@ const bgClasses = {
   amber: 'bg-warning/10 hover:bg-warning/20',
 };
 
-export function CategorySection({ category, goals, onToggle, onDelete, onAdd }: CategorySectionProps) {
+export function CategorySection({ category, goals, onToggle, onDelete, onAdd, onUpdateProgress }: CategorySectionProps) {
   const IconComponent = Icons[category.icon as keyof typeof Icons] as React.ElementType;
   const completedCount = goals.filter(g => g.completed).length;
   const progress = goals.length > 0 ? Math.round((completedCount / goals.length) * 100) : 0;
@@ -94,6 +95,7 @@ export function CategorySection({ category, goals, onToggle, onDelete, onAdd }: 
               goal={goal}
               onToggle={onToggle}
               onDelete={onDelete}
+              onUpdateProgress={onUpdateProgress}
               delay={index * 0.05}
             />
           ))}

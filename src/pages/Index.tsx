@@ -19,7 +19,7 @@ import { useGoals } from '@/hooks/useGoals';
 export default function Index() {
   const { user, loading: authLoading, signOut } = useAuth();
   const navigate = useNavigate();
-  const { goals, loading: goalsLoading, addGoal, toggleGoal, deleteGoal } = useGoals();
+  const { goals, loading: goalsLoading, addGoal, toggleGoal, deleteGoal, updateProgress } = useGoals();
   
   const [activeCategory, setActiveCategory] = useState<GoalCategory | 'all'>('all');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -144,6 +144,7 @@ export default function Index() {
                       onToggle={toggleGoal}
                       onDelete={deleteGoal}
                       onAdd={addGoal}
+                      onUpdateProgress={updateProgress}
                     />
                   ))}
                 </div>
@@ -158,6 +159,7 @@ export default function Index() {
                       onToggle={toggleGoal}
                       onDelete={deleteGoal}
                       onAdd={addGoal}
+                      onUpdateProgress={updateProgress}
                     />
                   ))}
                 </div>
@@ -250,6 +252,7 @@ export default function Index() {
                     onToggle={toggleGoal}
                     onDelete={deleteGoal}
                     onAdd={addGoal}
+                    onUpdateProgress={updateProgress}
                   />
                 ))}
             </div>

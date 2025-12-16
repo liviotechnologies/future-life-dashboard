@@ -135,12 +135,45 @@ export function useGoals() {
     }
   };
 
+  const updateProgress = async (id: string, newProgress: number) => {
+    const goal = goals.find(g => g.id === id);
+    if (!goal) return;
+
+    const isCompleted = goal.target ? newProgress >= goal.target : newProgress >= 100;
+
+    try {
+      const { error } = await supabase
+        .from('goals')
+        .update({ 
+          progress: newProgress,
+          completed: isCompleted
+        })
+        .eq('id', id);
+
+      if (error) throw error;
+
+      setGoals(prev => prev.map(g => 
+        g.id === id ? { ...g, progress: newProgress, completed: isCompleted } : g
+      ));
+      
+      if (isCompleted) {
+        toast.success('Goal completed! 🎉');
+      } else {
+        toast.success('Progress updated!');
+      }
+    } catch (error) {
+      console.error('Error updating progress:', error);
+      toast.error('Failed to update progress');
+    }
+  };
+
   return {
     goals,
     loading,
     addGoal,
     toggleGoal,
     deleteGoal,
+    updateProgress,
     refetch: fetchGoals,
   };
 }
